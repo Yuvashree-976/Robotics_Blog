@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboticsHub – Learn • Build • Explore</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<header class="site-header">
+    <div class="container header-inner">
+        <a href="index.html" class="logo">Robotics<span>Hub</span></a>
+
+        <nav class="nav-links">
+            <a href="index.html" class="nav-link active">Home</a>
+            <a href="registration.html" class="nav-link">Register</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="news.html" class="nav-link">News</a>
+        </nav>
+
+        <div class="theme-toggle">
+            <input type="checkbox" id="theme-toggle" class="theme-toggle-input">
+            <label for="theme-toggle" class="theme-toggle-label">
+                <span class="theme-icon theme-sun">☀</span>
+                <span class="theme-icon theme-moon">🌙</span>
+            </label>
+        </div>
+    </div>
+</header>
+
+<main class="page-wrapper">
+    <section class="hero">
+        <div class="container hero-inner">
+
+            <!-- Left: main hero text -->
+            <div class="hero-main reveal">
+                <div class="hero-tag">Robotics Blog • Student Hub</div>
+
+                <h1 class="hero-title">
+                    Learn Robotics, <span>Share</span> Your Journey.
+                </h1>
+
+                <p class="hero-subtitle">
+                    RoboticsHub is your mini robotics blog and learning space –
+                    explore concepts, track news, and register to join a growing community
+                    of builders and learners.
+                </p>
+
+                <ul class="hero-list">
+                    <li>Read simple explanations of robotics concepts.</li>
+                    <li>Discover curated news on humanoids, AI, drones, and automation.</li>
+                    <li>Register to get project ideas and future event updates.</li>
+                </ul>
+
+                <div class="hero-cta-row">
+                    <a href="registration.html" class="btn-primary">Get Started – Register</a>
+                    <a href="news.html" class="ghost-link">See Latest Robotics News →</a>
+                </div>
+            </div>
+
+            <!-- Right: three highlight cards -->
+            <div class="hero-side reveal">
+                <div class="card">
+                    <h2 style="margin-top:0; font-size:1.15rem;">Start Here</h2>
+                    <p class="form-subtitle">
+                        New to robotics? Read the <strong>About</strong> page first to understand
+                        what robotics is and why it matters.
+                    </p>
+                    <a href="about.html" class="ghost-link">Go to About →</a>
+                </div>
+
+                <div class="card" style="margin-top:0.9rem;">
+                    <h2 style="margin-top:0; font-size:1.15rem;">Join the Community</h2>
+                    <p class="form-subtitle">
+                        Use the registration form to share your interest area and goals. Your
+                        draft is saved automatically on your device.
+                    </p>
+                    <a href="registration.html" class="ghost-link">Open Registration →</a>
+                </div>
+
+                <div class="card" style="margin-top:0.9rem;">
+                    <h2 style="margin-top:0; font-size:1.15rem;">Stay Updated</h2>
+                    <p class="form-subtitle">
+                        Visit the news page to see how robots are entering kitchens, factories,
+                        hospitals, and space.
+                    </p>
+                    <a href="news.html" class="ghost-link">Explore News →</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<!-- Floating Robot Assistant (same as others) -->
+<div class="assistant">
+    <button class="assistant-toggle" aria-label="Open help">
+        🤖
+    </button>
+    <div class="assistant-panel">
+        <div class="assistant-header">
+            <span class="assistant-title">RoboHelper</span>
+            <button class="assistant-close" aria-label="Close help">×</button>
+        </div>
+        <div class="assistant-body">
+            <p class="assistant-greeting">
+                Welcome to RoboticsHub! Need help choosing where to start?
+            </p>
+            <div class="assistant-buttons">
+                <button data-assist="register">How do I register?</button>
+                <button data-assist="about">What is RoboticsHub?</button>
+                <button data-assist="news">How do I use the news page?</button>
+            </div>
+            <div class="assistant-log" id="assistant-log"></div>
+        </div>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <p>© 2025 RoboticsHub. Built for learners and future roboticists.</p>
+        <div class="footer-links">
+            <a href="https://www.robotics.org/" target="_blank">Robotics Industry</a>
+            <a href="https://robotics.nasa.gov/" target="_blank">NASA Robotics</a>
+            <a href="https://www.mygreatlearning.com/academy/learn-for-free/courses/robotics" target="_blank">
+                Free Robotics Course
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

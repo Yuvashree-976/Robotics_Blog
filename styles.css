@@ -13,7 +13,8 @@
     --accent-dark: #1d4ed8;
     --border-soft: rgba(148, 163, 184, 0.5);
     --radius-card: 18px;
-    --shadow-card: 0 22px 45px rgba(15, 23, 42, 0.9);
+    /* softened card shadow */
+    --shadow-card: 0 18px 40px rgba(15, 23, 42, 0.8);
     --transition-fast: 0.24s ease-in-out;
 }
 
@@ -66,6 +67,9 @@ html, body {
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #e5e7eb;
+    text-decoration: none;     /* make link style clean */
+    display: inline-flex;      /* align nicely */
+    align-items: center;
 }
 
 .logo span {
@@ -73,6 +77,10 @@ html, body {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+}
+
+.logo:visited {
+    color: inherit;
 }
 
 .nav-links {
@@ -184,15 +192,7 @@ html, body {
     pointer-events: none;
 }
 
-.card:hover {
-    transform: translateY(-8px) scale(1.01);
-    box-shadow: 0 28px 70px rgba(15, 23, 42, 0.9);
-    border-color: rgba(56, 189, 248, 0.7);
-}
-
-.card:hover::before {
-    opacity: 1;
-}
+/* NOTE: card hover removed to avoid too much hover */
 
 /* ========= HERO ========= */
 .hero {
@@ -224,8 +224,9 @@ html, body {
     margin-bottom: 0.75rem;
 }
 
+/* slightly bigger hero title */
 .hero-title {
-    font-size: 2.35rem;
+    font-size: 2.6rem;
     line-height: 1.1;
     margin: 0 0 0.75rem;
 }
@@ -270,15 +271,7 @@ html, body {
     transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.hero-list li:hover {
-    transform: translateX(4px);
-    color: #e5e7eb;
-}
-
-.hero-list li:hover::before {
-    transform: scale(1.5);
-    box-shadow: 0 0 16px 4px rgba(56, 189, 248, 0.8);
-}
+/* hero list hover removed (text, not a button) */
 
 .hero-cta-row {
     display: flex;
@@ -505,11 +498,7 @@ html, body {
     transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
 }
 
-.about-img:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 26px 60px rgba(56, 189, 248, 0.6);
-    filter: saturate(1.1);
-}
+/* about-img hover removed (image is not a button/link) */
 
 /* Link chips */
 .link-grid {
@@ -599,10 +588,7 @@ html, body {
     border-top: 1px solid rgba(148, 163, 184, 0.5);
 }
 
-.news-card:hover .news-thumb {
-    transform: scale(1.06);
-    filter: brightness(1.05);
-}
+/* news-card image hover removed (card itself is not a button) */
 
 .news-tag {
     display: inline-flex;
@@ -1250,11 +1236,7 @@ body:has(#theme-toggle:checked) .hero-list li::before {
     box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.5);
 }
 
-body:has(#theme-toggle:checked) .hero-list li:hover::before {
-    transform: scale(1.5);
-    box-shadow: 0 0 16px 4px rgba(56, 189, 248, 0.8);
-}
-
+/* removed hover for hero-list in light mode as well */
 
 /* 3D model card style */
 .sketchfab-embed-wrapper {
@@ -1372,12 +1354,7 @@ body:has(#theme-toggle:checked) .sketchfab-credit a:hover {
     opacity: 0.95;
 }
 
-/* Hover effect */
-.live-news-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.95);
-    border-color: rgba(56, 189, 248, 0.8);
-}
+/* hover removed for live-news-item */
 
 /* Title and meta inside each card */
 .live-news-title {
