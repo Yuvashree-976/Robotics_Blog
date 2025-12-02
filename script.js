@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const draftStatus = document.getElementById("draft-status");
     const DRAFT_KEY = "rh-registration-draft";
 
-    // Load draft from localStorage
+    /* ---------- DRAFT RESTORE ---------- */
     const savedDraft = localStorage.getItem(DRAFT_KEY);
     if (savedDraft) {
       try {
@@ -129,7 +129,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (data.email && email) email.value = data.email;
         if (data.interest && interest) interest.value = data.interest;
         if (data.reason && reason) reason.value = data.reason;
-        // For security, we usually avoid restoring passwords automatically
+        // password is not restored for security
+
         if (draftStatus) {
           draftStatus.textContent =
             "Draft restored from previous session on this device.";
@@ -153,24 +154,25 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // Listen for changes to save draft
     [fullName, email, password, interest, reason].forEach((field) => {
       if (!field) return;
       field.addEventListener("input", saveDraft);
       field.addEventListener("change", saveDraft);
     });
 
-    // Helper: clear errors
-    function clearErrors() {
-      const errors = form.querySelectorAll(".error-message");
-      errors.forEach((el) => el.remove());
+    /* ---------- HELPER FUNCTIONS (tutorial-style) ---------- */
 
-      const errorInputs = form.querySelectorAll(".input-error");
-      errorInputs.forEach((el) => el.classList.remove("input-error"));
+    function clearFieldState(input) {
+      if (!input) return;
+      input.classList.remove("input-error", "input-success");
+      const msg = input.nextElementSibling;
+      if (msg && msg.classList.contains("error-message")) {
+        msg.remove();
+      }
     }
 
-    // Helper: show error
     function showError(input, message) {
+      clearFieldState(input);
       input.classList.add("input-error");
 
       let error = input.nextElementSibling;
@@ -182,75 +184,189 @@ document.addEventListener("DOMContentLoaded", function () {
       error.textContent = message;
     }
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      clearErrors();
+    function showSuccess(input) {
+      clearFieldState(input);
+      input.classList.add("input-success");
+      // success has no extra message
+    }
 
-      let isValid = true;
-      let firstInvalid = null;
+    function isRequired(value) {
+      return value.trim() !== "";
+    }
 
-      // 1. Full name
-      const nameValue = fullName.value.trim();
-      if (nameValue.length < 3) {
-        isValid = false;
-        showError(fullName, "Name must be at least 3 characters.");
-        firstInvalid = firstInvalid || fullName;
-      } else if (!/^[A-Za-z\s]+$/.test(nameValue)) {
-        isValid = false;
-        showError(fullName, "Name should contain only letters and spaces.");
-        firstInvalid = firstInvalid || fullName;
+    function isBetween(len, min, max) {
+      return len >= min && len <= max;
+    }
+
+    function isEmailValid(emailValue) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(emailValue);
+    }
+
+    // strong password like in the example page
+    function isPasswordSecure(pass) {
+      const re =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+      return re.test(pass);
+    }
+
+    /* ---------- FIELD-LEVEL VALIDATORS ---------- */
+
+    function validateFullName() {
+      const value = fullName.value.trim();
+
+      if (!isRequired(value)) {
+        showError(fullName, "Name is required.");
+        return false;
       }
 
-      // 2. Email
-      const emailValue = email.value.trim();
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailPattern.test(emailValue)) {
-        isValid = false;
-        showError(email, "Please enter a valid email address (example@domain.com).");
-        firstInvalid = firstInvalid || email;
+      if (!isBetween(value.length, 3, 25)) {
+        showError(fullName, "Name must be between 3 and 25 characters.");
+        return false;
       }
 
-      // 3. Password
-      const passValue = password.value;
-      if (passValue.length < 8) {
-        isValid = false;
-        showError(password, "Password must be at least 8 characters.");
-        firstInvalid = firstInvalid || password;
-      } else if (!/[A-Za-z]/.test(passValue) || !/[0-9]/.test(passValue)) {
-        isValid = false;
+      if (!/^[A-Za-z\s]+$/.test(value)) {
+        showError(
+          fullName,
+          "Name should contain only letters and spaces."
+        );
+        return false;
+      }
+
+      showSuccess(fullName);
+      return true;
+    }
+
+    function validateEmail() {
+      const value = email.value.trim();
+
+      if (!isRequired(value)) {
+        showError(email, "Email is required.");
+        return false;
+      }
+
+      if (!isEmailValid(value)) {
+        showError(email, "Please enter a valid email (example@domain.com).");
+        return false;
+      }
+
+      showSuccess(email);
+      return true;
+    }
+
+    function validatePassword() {
+      const value = password.value;
+
+      if (!isRequired(value)) {
+        showError(password, "Password is required.");
+        return false;
+      }
+
+      if (!isPasswordSecure(value)) {
         showError(
           password,
-          "Password must contain both letters and numbers."
+          "Password must be at least 8 characters with 1 lowercase, 1 uppercase, 1 number, and 1 special character."
         );
-        firstInvalid = firstInvalid || password;
+        return false;
       }
 
-      // 4. Interest
-      if (!interest.value) {
-        isValid = false;
+      showSuccess(password);
+      return true;
+    }
+
+    function validateInterest() {
+      const value = interest.value;
+
+      if (!isRequired(value)) {
         showError(interest, "Please choose your focus area.");
-        firstInvalid = firstInvalid || interest;
+        return false;
       }
 
-      // 5. Reason (optional)
-      const reasonValue = reason.value.trim();
-      if (reasonValue && reasonValue.length < 10) {
-        isValid = false;
+      showSuccess(interest);
+      return true;
+    }
+
+    function validateReason() {
+      const value = reason.value.trim();
+
+      if (!value) {
+        // optional field: empty is allowed
+        clearFieldState(reason);
+        return true;
+      }
+
+      if (value.length < 10) {
         showError(
           reason,
           "Please write at least 10 characters or leave it empty."
         );
-        firstInvalid = firstInvalid || reason;
+        return false;
       }
 
-      if (!isValid) {
-        if (firstInvalid) firstInvalid.focus();
+      showSuccess(reason);
+      return true;
+    }
+
+    /* ---------- LIVE VALIDATION (on input / change) ---------- */
+/* ---------- LIVE VALIDATION (on input / change / blur) ---------- */
+
+// Name
+if (fullName) {
+  fullName.addEventListener("input", validateFullName);
+  fullName.addEventListener("blur", validateFullName);   // ← fires when you press Tab
+}
+
+// Email
+if (email) {
+  email.addEventListener("input", validateEmail);
+  email.addEventListener("blur", validateEmail);         // ← on Tab / focus out
+}
+
+// Password
+if (password) {
+  password.addEventListener("input", validatePassword);
+  password.addEventListener("blur", validatePassword);   // ← on Tab
+}
+
+// Interest (select)
+if (interest) {
+  interest.addEventListener("change", validateInterest); // changes option
+  interest.addEventListener("blur", validateInterest);   // leaves the dropdown
+}
+
+// Reason (textarea)
+if (reason) {
+  reason.addEventListener("input", validateReason);
+  reason.addEventListener("blur", validateReason);       // on Tab
+}
+
+
+    /* ---------- SUBMIT HANDLER ---------- */
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const isNameOk = validateFullName();
+      const isEmailOk = validateEmail();
+      const isPasswordOk = validatePassword();
+      const isInterestOk = validateInterest();
+      const isReasonOk = validateReason();
+
+      if (!(isNameOk && isEmailOk && isPasswordOk && isInterestOk && isReasonOk)) {
+        const firstError = form.querySelector(".input-error");
+        if (firstError) firstError.focus();
         return;
       }
 
-      // ✅ All good: clear draft & redirect
+      // ✅ All good
       localStorage.removeItem(DRAFT_KEY);
       form.reset();
+
+      [fullName, email, password, interest, reason].forEach((input) => {
+        if (!input) return;
+        clearFieldState(input);
+      });
+
       if (draftStatus) {
         draftStatus.textContent =
           "Registration successful! Redirecting to About page...";
